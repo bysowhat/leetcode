@@ -204,10 +204,115 @@ void lc_findLength()
 
 }
 
+bool all_xing(string src, int start, int end){
+  for (size_t i = start; i <= end; i++)
+  {
+    if(src[i]!='*'){
+      return false;
+    }
+  }
+  return true;
+}
+
+bool one_wenhao_others_xing(string src, int start, int end, char target)
+{
+  int num_wenhao = 0;
+  int num_xing = 0;
+  for (size_t i = start; i <= end; i++)
+  {
+    if (src[i]=='*')
+    {
+      num_xing++;
+    }
+    if (src[i]==target)
+    {
+      num_wenhao++;
+    }
+  }
+  if (num_wenhao==1 && num_xing==end)
+  {
+    return true;
+  }else{
+    return false;
+  }
+  
+}
+
+bool isMatch(string s, string p, int i, int j) {
+
+  if (i==0 && j==0)
+  {
+    if (s[i]==p[j] || p[j]=='?' || p[j]=='*')
+    {
+      return true;
+    } else {
+      return false;
+    }
+  } else if(i==0 && j>0){
+    string tempt_p = p.substr(0, j+1);
+    if (one_wenhao_others_xing(p, 0, j, s[0]))
+    {
+      return true;
+    }else if (one_wenhao_others_xing(p, 0, j, '?'))
+      {
+        return true;
+      }else{
+        return false;
+      }
+  } else if(i>0 && j==0){
+    if (p[j]=='*')
+    {
+      return true;
+    }else{
+      return false;
+    }
+    
+  }else{
+    if (p[j] != '*')
+    {
+      if (s[i] == p[j] || p[j] == '?')
+      {
+        return isMatch(s, p, i-1, j-1);
+      }else{
+        return false;
+      }
+    }else{
+      bool a = isMatch(s, p, i, j-1);
+      bool b = isMatch(s, p, i-1, j);
+      return a || b;
+    }
+  }
+}
+
+void lc_isMatch()
+{
+  string s0 = "aa";
+  string p0 = "a";
+  cout<<isMatch(s0, p0, s0.size()-1, p0.size()-1)<<endl;
+
+  string s1 = "aa";
+  string p1 = "*";
+  cout<<isMatch(s1, p1, s1.size()-1, p1.size()-1)<<endl;
+
+  string s2 = "cb";
+  string p2 = "?a";
+  cout<<isMatch(s2, p2, s2.size()-1, p2.size()-1)<<endl;
+
+  string s3 = "adceb";
+  string p3 = "*a*b";
+  cout<<isMatch(s3, p3, s3.size()-1, p3.size()-1)<<endl;
+
+  string s4 = "acdcb";
+  string p4 = "a*c?b";
+  cout<<isMatch(s4, p4, s4.size()-1, p4.size()-1)<<endl;
+
+}
+
 int main()
 {
   // test_string0_has_char1();
   // lc_longestCommonSubsequence();
   // lc_minDistance();
-  lc_findLength();
+  // lc_findLength();
+  lc_isMatch();
 }
